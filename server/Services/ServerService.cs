@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace ServerProject
+namespace server.Services
 {
     public class ServerService : IServerService
     {

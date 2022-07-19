@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 
-namespace ServerProject
+namespace server.Services
 {
     public interface IServerService
     {
