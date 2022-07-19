@@ -6,5 +6,6 @@ namespace server.Models
     {
         public Socket Socket { get; set; }
         public bool isSended { get; set; }
+        public DateTime LastRecivedTime { get; set; }
     }
 }

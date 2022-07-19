@@ -59,7 +59,7 @@ namespace server.Services
             Socket.BeginAccept(Connect, null);
         }
 
-        private void Listen(IAsyncResult result)
+        private async void Listen(IAsyncResult result)
         {
             Socket current = (Socket)result.AsyncState;
             int received;
@@ -76,7 +76,7 @@ namespace server.Services
             }
             GetMessage(received);
 
-            if (!CheckMessageGap(current)) return;
+            if (!await CheckMessageGap(current)) return;
 
             SendResponseMessage(current, "Message successfuly delivered.");
 
@@ -91,17 +91,16 @@ namespace server.Services
             string message = Encoding.ASCII.GetString(recBuf);
             Console.WriteLine("Message: " + message);
         }
-        private bool CheckMessageGap(Socket currentSocket)
+        private async Task<bool> CheckMessageGap(Socket currentSocket)
         {
-            var timeDifferent = (DateTime.Now - LastReceivedTime).TotalSeconds;
-            LastReceivedTime = DateTime.Now;
+            var clientIndex = Clients.FindIndex(x => x.Socket == currentSocket);
+            var timeDifferent = (DateTime.Now - Clients[clientIndex].LastRecivedTime).TotalSeconds;
+            Clients[clientIndex].LastRecivedTime = DateTime.Now;
             if (timeDifferent <= 1)
             {
-                var clientIndex = Clients.FindIndex(x => x.Socket == currentSocket);
                 if (Clients[clientIndex].isSended)
                 {
                     SendResponseMessage(currentSocket, "Your are disconnected from server.");
-                    Thread.Sleep(5000);
                     currentSocket.Close();
                     return false;
                 }
