@@ -100,7 +100,7 @@ namespace server.Services
             {
                 if (Clients[clientIndex].isSended)
                 {
-                    SendResponseMessage(currentSocket, "Your are disconnected from server.");
+                    SendResponseMessage(currentSocket, "You are disconnected from server.");
                     currentSocket.Close();
                     return false;
                 }
