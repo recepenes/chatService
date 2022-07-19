@@ -38,8 +38,11 @@ namespace ChatConsoleTest
             var result2 = client2.Connect();
 
             //Assert
-            Assert.IsTrue(result);
-            Assert.IsTrue(result2);
+            Assert.Multiple(() =>
+            {
+                Assert.IsTrue(result);
+                Assert.IsTrue(result2);
+            });
         }
         [Test]
         public void Send_Message_One_Client()
@@ -51,8 +54,11 @@ namespace ChatConsoleTest
             _client.SendMessage("Test_Client_1");
             var message = _client.GetMessage();
             //Assert
-            Assert.IsTrue(result);
-            Assert.That(message, Does.Contain("Message successfuly delivered."));
+            Assert.Multiple(() =>
+            {
+                Assert.IsTrue(result);
+                Assert.That(message, Does.Contain("Message successfuly delivered."));
+            });
         }
         [Test]
         public void Send_Message_Two_Client()
@@ -68,11 +74,14 @@ namespace ChatConsoleTest
             _client2.SendMessage("Test_Client_2");
             var message2 = _client2.GetMessage();
             //Assert
-            Assert.IsTrue(result);
-            Assert.That(message, Does.Contain("Message successfuly delivered."));
+            Assert.Multiple(() =>
+            {
+                Assert.IsTrue(result);
+                Assert.That(message, Does.Contain("Message successfuly delivered."));
 
-            Assert.IsTrue(result2);
-            Assert.That(message2, Does.Contain("Message successfuly delivered."));
+                Assert.IsTrue(result2);
+                Assert.That(message2, Does.Contain("Message successfuly delivered."));
+            });
         }
         [Test]
         public void Send_Two_Message_One_Second()
@@ -86,9 +95,12 @@ namespace ChatConsoleTest
             _client.SendMessage("Test_Client_2");
             var message2 = _client.GetMessage();
             //Assert
-            Assert.IsTrue(result);
-            Assert.That(message2, Does.Contain("You can only send 1 message per second," +
-                    " next time you will disconeected from the server."));
+            Assert.Multiple(() =>
+            {
+                Assert.IsTrue(result);
+                Assert.That(message2, Does.Contain("You can only send 1 message per second," +
+                        " next time you will disconeected from the server."));
+            });
         }
         [Test]
         public void Two_Failed_Attempt()
@@ -112,10 +124,13 @@ namespace ChatConsoleTest
 
 
             //Assert
-            Assert.IsTrue(result);
-            Assert.That(message2, Does.Contain("You can only send 1 message per second," +
-                    " next time you will disconeected from the server."));
-            Assert.That(message5, Does.Contain("You are disconnected from server."));
+            Assert.Multiple(() =>
+            {
+                Assert.IsTrue(result);
+                Assert.That(message2, Does.Contain("You can only send 1 message per second," +
+                                " next time you will disconeected from the server."));
+                Assert.That(message5, Does.Contain("You are disconnected from server."));
+            });
         }
     }
 }
