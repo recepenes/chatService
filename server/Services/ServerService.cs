@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ServerProject
 {
-    public class ServerService
+    public class ServerService : IServerService
     {
         public int PORT { get; private set; }
         public Socket Socket { get; private set; }
