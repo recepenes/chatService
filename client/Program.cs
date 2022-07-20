@@ -18,7 +18,7 @@ namespace client
             Console.WriteLine($"{_clientService.ID} CONNECTED.");
 
             Console.WriteLine($"{_clientService.ID} started to listening...");
-            _clientService.Listen();
+             _clientService.Listen();
 
         }
     }

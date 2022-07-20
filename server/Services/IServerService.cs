@@ -9,6 +9,7 @@ namespace server.Services
         int PORT { get; }
         Socket Socket { get; }
 
+        void Exit();
         bool StartServer();
     }
 }
