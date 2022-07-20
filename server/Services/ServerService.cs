@@ -114,11 +114,6 @@ namespace server.Services
             var response = Encoding.ASCII.GetBytes(message);
             socket.Send(response);
         }
-
-        public void Exit()
-        {
-            Socket.Close();
-            Environment.Exit(0);
-        }
+    
     }
 }
