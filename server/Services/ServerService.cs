@@ -11,7 +11,6 @@ namespace server.Services
         public Socket Socket { get; private set; }
         public int BufferSize { get; private set; }
         public byte[] Buffer { get; set; }
-        private DateTime LastReceivedTime;
         private List<ClientModel> Clients = new();
         public ServerService(int port)
         {
@@ -76,7 +75,7 @@ namespace server.Services
             }
             GetMessage(received);
 
-            if (!await CheckMessageGap(current)) return;
+            if (!CheckMessageGap(current)) return;
 
             SendResponseMessage(current, "Message successfuly delivered.");
 
@@ -91,7 +90,7 @@ namespace server.Services
             string message = Encoding.ASCII.GetString(recBuf);
             Console.WriteLine("Message: " + message);
         }
-        private async Task<bool> CheckMessageGap(Socket currentSocket)
+        private bool CheckMessageGap(Socket currentSocket)
         {
             var clientIndex = Clients.FindIndex(x => x.Socket == currentSocket);
             var timeDifferent = (DateTime.Now - Clients[clientIndex].LastRecivedTime).TotalSeconds;
@@ -114,6 +113,12 @@ namespace server.Services
         {
             var response = Encoding.ASCII.GetBytes(message);
             socket.Send(response);
+        }
+
+        public void Exit()
+        {
+            Socket.Close();
+            Environment.Exit(0);
         }
     }
 }

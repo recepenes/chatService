@@ -11,9 +11,9 @@ namespace client.Services
         public Socket Socket { get; private set; }
 
         public int ID { get; private set; }
-        public DateTime LastMessageTime { get; set; }
         public int TryCount { get; set; }
-
+        private static ManualResetEvent sendDone =
+      new ManualResetEvent(false);
         public ClientService(int port)
         {
             ID = new Random().Next(0, 100);
@@ -46,31 +46,66 @@ namespace client.Services
             {
                 string message = SetMessage();
                 SendMessage(message);
-                GetMessage();
+                Console.WriteLine("Response: " + GetMessage());
             }
         }
 
         public string GetMessage()
         {
-            byte[] recBuf = new byte[254];
-            Socket.Receive(recBuf);
-            string message = Encoding.ASCII.GetString(recBuf);
-            Console.WriteLine("Response: " + message);
-            return message;
+            Thread.Sleep(5);
+            try
+            {
+                byte[] recBuf = new byte[254];
+                Socket.Receive(recBuf);
+                string message = Encoding.ASCII.GetString(recBuf);
+                return message;
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
         }
 
-        public void SendMessage(string message)
-        {
-            byte[] buffer = Encoding.UTF8.GetBytes(message);
-            Socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-            LastMessageTime = DateTime.Now;
-        }
+
+
 
         private string SetMessage()
         {
             Console.WriteLine("Type your message: ....");
             return Console.ReadLine();
+
         }
+
+        public void SendMessage(string data)
+        {
+            // Convert the string data to byte data using ASCII encoding.  
+            byte[] byteData = Encoding.ASCII.GetBytes(data);
+
+            // Begin sending the data to the remote device.  
+            Socket.BeginSend(byteData, 0, byteData.Length, 0,
+                new AsyncCallback(SendCallback), Socket);
+        }
+
+        private void SendCallback(IAsyncResult ar)
+        {
+            try
+            {
+                // Retrieve the socket from the state object.  
+                Socket client = (Socket)ar.AsyncState;
+
+                // Complete sending the data to the remote device.  
+                int bytesSent = client.EndSend(ar);
+                Console.WriteLine("Sent {0} bytes to server.", bytesSent);
+
+                // Signal that all bytes have been sent.  
+                sendDone.Set();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
 
         public void Exit()
         {

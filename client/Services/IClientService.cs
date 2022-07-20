@@ -5,7 +5,6 @@ namespace client.Services
     public interface IClientService
     {
         int ID { get; }
-        DateTime LastMessageTime { get; set; }
         int PORT { get; }
         Socket Socket { get; }
         int TryCount { get; set; }
@@ -14,6 +13,6 @@ namespace client.Services
         void Exit();
         string GetMessage();
         void Listen();
-        void SendMessage(string message);
+        void SendMessage(string data);
     }
 }

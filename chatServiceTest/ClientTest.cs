@@ -17,10 +17,11 @@ namespace ChatConsoleTest
         }
 
         [Test]
-        public void Connect_Server_One_Client()
+        public void Connect_Server_With_One_Client()
         {
             //Arrange
             _ = _server.StartServer();
+
             //Act
             var result = _client.Connect();
 
@@ -28,14 +29,14 @@ namespace ChatConsoleTest
             Assert.IsTrue(result);
         }
         [Test]
-        public void Connect_Server_Two_Client()
+        public void Connect_Server_With_Two_Client()
         {
             //Arrange
-            var client2 = new ClientService(100);
             var server = _server.StartServer();
+
             //Act
             var result = _client.Connect();
-            var result2 = client2.Connect();
+            var result2 = _client2.Connect();
 
             //Assert
             Assert.Multiple(() =>
@@ -45,14 +46,16 @@ namespace ChatConsoleTest
             });
         }
         [Test]
-        public void Send_Message_One_Client()
+        public void Send_Message_From_One_Client()
         {
             //Arrange
             _ = _server.StartServer();
+
             //Act
             var result = _client.Connect();
             _client.SendMessage("Test_Client_1");
             var message = _client.GetMessage();
+
             //Assert
             Assert.Multiple(() =>
             {
@@ -61,10 +64,11 @@ namespace ChatConsoleTest
             });
         }
         [Test]
-        public void Send_Message_Two_Client()
+        public void Send_Message_From_Two_Client()
         {
             //Arrange
             _ = _server.StartServer();
+
             //Act
             var result = _client.Connect();
             _client.SendMessage("Test_Client_1");
@@ -73,6 +77,7 @@ namespace ChatConsoleTest
             var result2 = _client2.Connect();
             _client2.SendMessage("Test_Client_2");
             var message2 = _client2.GetMessage();
+
             //Assert
             Assert.Multiple(() =>
             {
@@ -84,16 +89,18 @@ namespace ChatConsoleTest
             });
         }
         [Test]
-        public void Send_Two_Message_One_Second()
+        public void Send_Two_Message_In_One_Second_With_One_Client()
         {
             //Arrange
             _ = _server.StartServer();
+
             //Act
             var result = _client.Connect();
             _client.SendMessage("Test_Client_1");
             var message = _client.GetMessage();
             _client.SendMessage("Test_Client_2");
             var message2 = _client.GetMessage();
+
             //Assert
             Assert.Multiple(() =>
             {
@@ -103,33 +110,26 @@ namespace ChatConsoleTest
             });
         }
         [Test]
-        public void Two_Failed_Attempt()
+        public void Second_Failed_Attempt()
         {
             //Arrange
             _ = _server.StartServer();
+
             //Act
             var result = _client.Connect();
-
             _client.SendMessage("Test_Client_1");
-            var message = _client.GetMessage();
             _client.SendMessage("Test_Client_2");
-            var message2 = _client.GetMessage();
-            Thread.Sleep(2000);
+            var message1 = _client.GetMessage();
             _client.SendMessage("Test_Client_3");
-            var message3 = _client.GetMessage();
-            _client.SendMessage("Test_Client_4");
-            var message4 = _client.GetMessage();
-            _client.SendMessage("Test_Client_5");
-            var message5 = _client.GetMessage();
-
+            var message2 = _client.GetMessage();
 
             //Assert
             Assert.Multiple(() =>
             {
                 Assert.IsTrue(result);
-                Assert.That(message2, Does.Contain("You can only send 1 message per second," +
+                Assert.That(message1, Does.Contain("You can only send 1 message per second," +
                                 " next time you will disconeected from the server."));
-                Assert.That(message5, Does.Contain("You are disconnected from server."));
+                Assert.That(message2, Does.Contain("You are disconnected from server."));
             });
         }
     }
