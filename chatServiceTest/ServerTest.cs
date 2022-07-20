@@ -1,10 +1,5 @@
-﻿using client.Services;
-using server.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using server.Services;
+
 
 namespace chatServiceTest
 {
@@ -27,21 +22,7 @@ namespace chatServiceTest
 
             //Assert
             Assert.IsTrue(result);
-            _server.Exit();
         }
-        [Test]
-        public void ShutDown_Server()
-        {
-            //Arrange
-           _= _server2.StartServer();
-
-            //Act
-            _server2.Exit();
-            var result = _server2.StartServer();
-
-            //Assert
-            Assert.IsTrue(result);
-
-        }
+    
     }
 }
