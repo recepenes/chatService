@@ -1,5 +1,4 @@
-﻿
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -7,17 +6,15 @@ namespace client.Services
 {
     public class ClientService : IClientService
     {
-        public int PORT { get; private set; }
-        public Socket Socket { get; private set; }
+        public int Port { get; private set; }
+        private Socket Socket { get; set; }
 
         public int ID { get; private set; }
-        public int TryCount { get; set; }
-        private static ManualResetEvent sendDone =
-      new ManualResetEvent(false);
+        private static ManualResetEvent sendDone = new(false);
         public ClientService(int port)
         {
             ID = new Random().Next(0, 100);
-            PORT = port;
+            Port = port;
             Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
@@ -27,7 +24,7 @@ namespace client.Services
             {
                 try
                 {
-                    Socket.Connect(IPAddress.Loopback, PORT);
+                    Socket.Connect(IPAddress.Loopback, Port);
                     return true;
                 }
                 catch (Exception ex)
@@ -66,9 +63,6 @@ namespace client.Services
             }
         }
 
-
-
-
         private string SetMessage()
         {
             Console.WriteLine("Type your message: ....");
@@ -105,7 +99,6 @@ namespace client.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-
 
         public void Exit()
         {

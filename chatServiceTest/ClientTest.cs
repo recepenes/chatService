@@ -106,7 +106,7 @@ namespace ChatConsoleTest
             {
                 Assert.IsTrue(result);
                 Assert.That(message2, Does.Contain("You can only send 1 message per second," +
-                        " next time you will disconeected from the server."));
+                        " next time you will disconnected from the server."));
             });
         }
         [Test]
@@ -128,7 +128,7 @@ namespace ChatConsoleTest
             {
                 Assert.IsTrue(result);
                 Assert.That(message1, Does.Contain("You can only send 1 message per second," +
-                                " next time you will disconeected from the server."));
+                                " next time you will disconnected from the server."));
                 Assert.That(message2, Does.Contain("You are disconnected from server."));
             });
         }

@@ -5,9 +5,7 @@ namespace client.Services
     public interface IClientService
     {
         int ID { get; }
-        int PORT { get; }
-        Socket Socket { get; }
-        int TryCount { get; set; }
+        int Port { get; }
 
         bool Connect();
         void Exit();

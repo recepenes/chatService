@@ -7,15 +7,15 @@ namespace server.Services
 {
     public class ServerService : IServerService
     {
-        public int PORT { get; private set; }
-        public Socket Socket { get; private set; }
-        public int BufferSize { get; private set; }
-        public byte[] Buffer { get; set; }
+        public int Port { get; private set; }
+        private Socket Socket { get; set; }
+        private int BufferSize { get; set; }
+        private byte[] Buffer { get; set; }
         private List<ClientModel> Clients = new();
         public ServerService(int port)
         {
             Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            PORT = port;
+            Port = port;
             BufferSize = 2048;
             Buffer = new byte[BufferSize];
         }
@@ -24,11 +24,12 @@ namespace server.Services
         {
             try
             {
-                IPEndPoint endPoint = new(IPAddress.Any, PORT);
+                IPEndPoint endPoint = new(IPAddress.Any, Port);
                 Socket.Bind(endPoint);
 
                 Socket.Listen(0);
                 Socket.BeginAccept(Connect, null);
+
                 return true;
             }
             catch (Exception ex)
@@ -36,7 +37,6 @@ namespace server.Services
                 Console.WriteLine(ex.ToString());
                 return false;
             }
-
         }
 
         private void Connect(IAsyncResult result)
@@ -104,7 +104,7 @@ namespace server.Services
                     return false;
                 }
                 SendResponseMessage(currentSocket, "You can only send 1 message per second," +
-                    " next time you will disconeected from the server.");
+                    " next time you will disconnected from the server.");
                 Clients[clientIndex].isSended = true;
             }
             return true;
@@ -114,6 +114,5 @@ namespace server.Services
             var response = Encoding.ASCII.GetBytes(message);
             socket.Send(response);
         }
-    
     }
 }

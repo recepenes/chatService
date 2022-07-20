@@ -4,10 +4,8 @@ namespace server.Services
 {
     public interface IServerService
     {
-        byte[] Buffer { get; set; }
-        int BufferSize { get; }
-        int PORT { get; }
-        Socket Socket { get; }
+
+        int Port { get; }
 
         bool StartServer();
     }
